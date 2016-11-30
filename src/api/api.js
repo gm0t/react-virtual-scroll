@@ -3,8 +3,9 @@ import Items from './items';
 export default class VirtualScrollApi {
   constructor(params) {
     this.listeners = [];
-    this.items = new Items([], params.itemHeight, params.viewportHeight);
-    this.itemsForBuffer = 5;
+    this.items = new Items([], params.itemHeight);
+    this.viewportHeight = params.viewportHeight;
+    this.bufferSize = params.bufferSize;
     this.currentPos = 0;
     this.updateVisibleRange();
   }
@@ -17,8 +18,8 @@ export default class VirtualScrollApi {
   }
 
   updateVisibleRange(forced) {
-    const {currentPos, itemsForBuffer, viewportHeight} = this;
-    const [start, end, range] = this.items.buildRange(currentPos, itemsForBuffer, viewportHeight);
+    const {currentPos, bufferSize, viewportHeight} = this;
+    const [start, end, range] = this.items.buildRange(currentPos, bufferSize, viewportHeight);
     const {currentRangeStart, currentRangeEnd} = this;
     if (!forced && currentRangeStart === start && currentRangeEnd === end) {
       return

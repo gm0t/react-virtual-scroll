@@ -10,6 +10,8 @@ export default class VirtualScrollViewport extends Component {
      * @type {number|string}
      */
     itemHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    bufferSize: PropTypes.number,
+    estimatedViewportHeight: PropTypes.number,
 
     /**
      * Inline styles
@@ -35,6 +37,8 @@ export default class VirtualScrollViewport extends Component {
 
   static defaultProps = {
     itemHeight: 'auto',
+    bufferSize: 5,
+    estimatedViewportHeight: 0,
     noInlineOverflow: false
   }
 
@@ -42,7 +46,8 @@ export default class VirtualScrollViewport extends Component {
     super(props)
     this.api = new VirtualScrollApi({
       itemHeight: props.itemHeight,
-      viewportHeight: 400
+      bufferSize: props.bufferSize,
+      viewportHeight: props.estimatedViewportHeight
     });
 
     this.state = this.api.getState();

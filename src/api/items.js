@@ -67,9 +67,13 @@ export default class Items {
     return true;
   }
 
-  buildRange(currentPos, itemsForBuffer, viewportHeight) {
-    let start = this.getIndexByPos(currentPos) - itemsForBuffer,
-      end = this.getIndexByPos(currentPos + viewportHeight) + itemsForBuffer,
+  buildRange(currentPos, bufferSize, viewportHeight) {
+    if (viewportHeight === 0) {
+      return [0, 0, []];
+    }
+
+    let start = this.getIndexByPos(currentPos) - bufferSize,
+      end = this.getIndexByPos(currentPos + viewportHeight) + bufferSize,
       range = [];
 
     start = Math.max(start, 0);

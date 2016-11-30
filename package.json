@@ -1,6 +1,6 @@
 {
   "name": "react-virtual-scroll",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "React component for efficient rendering large scrollable lists",
   "main": "lib/virtual-scroll.js",
   "scripts": {
@@ -21,6 +21,9 @@
     "list",
     "scrolling",
     "infinite"
+  ],
+  "files": [
+    "lib"
   ],
   "author": "Mikhail Bogdanov <admin@gm0.ru> (https://github.com/gm0t)",
   "license": "MIT",
