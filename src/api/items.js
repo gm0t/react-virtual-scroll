@@ -1,41 +1,15 @@
 import { cloneElement } from 'react';
-import assign from '../utils/assign';
 
 export default class Items {
   constructor(children, itemHeight) {
     this.itemHeight = typeof(itemHeight) === 'number' ? itemHeight : 'auto';
-    this.items = this.buildItems(children);
-  }
-
-  buildItems(children) {
-    const height = this.itemHeight;
-    let items = [], top = 0, item, minHeight = Infinity, maxHeight = -Infinity;
-    for (let i = 0, l = children.length, props; i < l; i += 1) {
-      item = {
-        height: height === 'auto' ? this.getHeight(children[i]) : height,
-        top: top
-      };
-
-      props = assign({}, children[i].props);
-      props.style = props.style || {};
-      props.style.position = 'absolute';
-      props.style.top = item.top;
-
-      item.cmp = cloneElement(children[i], props)
-      items.push(item);
-      minHeight = Math.min(minHeight, item.height);
-      maxHeight = Math.max(maxHeight, item.height);
-      top += item.height;
-    }
-
-    this.totalHeight = top;
-    this.minHeight = minHeight;
-    this.maxHeight = maxHeight;
-    return items;
+    this.setChildren(children);
   }
 
   setChildren(children) {
-    this.items = this.buildItems(children);
+    this.items = children.map(el => ({cmp: el}));
+    this._updateItemsPosition(0);
+    this._calcPeakHeights();
   }
 
   getHeight(child) {
@@ -63,7 +37,15 @@ export default class Items {
       return false
     }
 
-    item.height = height;
+    const {minHeight, maxHeight} = this;
+    if (item.height === minHeight || item.height === maxHeight) {
+      this._calcPeakHeights()
+    } else {
+      this.maxHeight = Math.max(this.maxHeight, height);
+      this.minHeight = Math.min(this.minHeight, height);
+    }
+
+    this._updateItemsPosition(index);
     return true;
   }
 
@@ -90,6 +72,50 @@ export default class Items {
     return this.itemHeight === 'auto' ?
       this._getIndexByPosVariableHeight(pos)
       : this._getIndexByPosStaticHeight(pos);
+  }
+
+  _updateItemsPosition(start = 0) {
+    const height = this.itemHeight;
+    let items = this.items;
+    if (!items.length) {
+      this.totalHeight = 0;
+      return;
+    }
+
+    let top = start ? items[start].top || 0 : 0,
+      item;
+
+    for (let i = start, l = items.length, props; i < l; i += 1) {
+      item = items[i];
+      item.height = height === 'auto' ? this.getHeight(item.cmp) : height;
+      item.top = top;
+      props = {...item.cmp.props};
+      props.style = {...props.style};
+      props.style.position = 'absolute';
+      props.style.top = item.top;
+      props.index = i;
+      item.cmp = cloneElement(item.cmp, props)
+      top += item.height;
+    }
+
+    this.totalHeight = top;
+    return items;
+  }
+
+  _calcPeakHeights() {
+    let min = Infinity, max = -Infinity, h;
+    for (let items = this.items, i = 0, l = items.length; i < l; i += 1) {
+      h = items[i].height;
+      if (h < min) {
+        min = h;
+      }
+      if (h > max) {
+        max = h;
+      }
+    }
+
+    this.minHeight = min;
+    this.maxHeight = max;
   }
 
   _getIndexByPosVariableHeight(pos) {

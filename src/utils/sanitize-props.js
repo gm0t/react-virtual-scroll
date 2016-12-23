@@ -1,7 +1,5 @@
-import assign from './assign';
-
 export default function sanitizeProps(props, propTypes) {
-  let sanitizedProps = assign({}, props);
+  let sanitizedProps = {...props};
   for (let prop in propTypes) {
     if (propTypes.hasOwnProperty(prop)) {
       delete sanitizedProps[prop];
