@@ -61,6 +61,7 @@ export default class VirtualScrollApi {
 
   getState = () => {
     return {
+      viewportHeight: this.viewportHeight,
       visibleRange: this.visibleRange,
       totalHeight: this.items.totalHeight
     }

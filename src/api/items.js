@@ -6,6 +6,10 @@ export default class Items {
     this.setChildren(children);
   }
 
+  get(index) {
+    return this.items[index];
+  }
+
   setChildren(children) {
     this.items = children.map(el => ({cmp: el}));
     this._updateItemsPosition(0);

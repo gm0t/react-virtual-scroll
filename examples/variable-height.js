@@ -57,6 +57,18 @@ export default class App extends Component {
     this.state = {items: buildItems(100)};
   }
 
+  handleScrollTo = e => {
+    var idx = e.target.getAttribute('data-idx'),
+      position = e.target.getAttribute('data-postion') || 'top';
+
+    if (!idx || !this.scrollApi) {
+      return;
+    }
+
+
+    this.scrollApi.scrollTo(idx, position);
+  }
+
   add = () => {
     const count = this.state.items.length + 1;
     const [itemFactory, itemHeight] = factories[Math.floor(Math.random() * factories.length)];
@@ -65,7 +77,6 @@ export default class App extends Component {
       stringGenerator(5)
     ));
 
-    console.log("addding")
     this.setState({items: this.state.items.slice(0)});
   }
 
@@ -73,9 +84,15 @@ export default class App extends Component {
     return (
       <div>
         <h1>Variable Height <button onClick={this.add}>add</button></h1>
-        <VirtualScroll style={{height: 400, width: 400}}>
+        <VirtualScroll style={{height: 400, width: 400}} onInit={api => this.scrollApi = api}>
           {this.state.items}
         </VirtualScroll>
+        <h2>Scroll to:</h2>
+        <ul onClick={this.handleScrollTo}>
+          <li><button data-idx="20" data-postion="middle">20 (middle)</button></li>
+          <li><button data-idx="50" data-postion="top">50 (top)</button></li>
+          <li><button data-idx="80" data-postion="bottom">80 (bottom)</button></li>
+        </ul>
       </div>
     )
   }
