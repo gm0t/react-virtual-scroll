@@ -110,6 +110,7 @@ export default class VirtualScrollViewport extends Component {
     }
 
     this.refs.viewport.scrollTop = scrollTop;
+    return true;
   }
 
   getChildContext() {

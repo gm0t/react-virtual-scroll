@@ -1,6 +1,6 @@
 {
   "name": "react-virtual-scroll",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "React component for efficient rendering large scrollable lists",
   "main": "lib/virtual-scroll.js",
   "scripts": {
