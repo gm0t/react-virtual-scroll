@@ -1,4 +1,5 @@
-import React, { Component, Children, PropTypes } from 'react';
+import React, { Component, Children } from 'react';
+import PropTypes from 'prop-types'
 // import VirtualScrollItem from './virtual-scroll-item';
 
 export default class VirtualScrollItems extends Component {
@@ -6,7 +7,7 @@ export default class VirtualScrollItems extends Component {
     getState: PropTypes.func.isRequired,
     setChildren: PropTypes.func.isRequired,
     listen: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context)

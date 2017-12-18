@@ -15,7 +15,7 @@ export default class VirtualScrollApi {
     return () => {
       this.listeners.splice(this.listeners.indexOf(cb), 1);
     }
-  }
+  };
 
   updateVisibleRange(forced) {
     const {currentPos, bufferSize, viewportHeight} = this;
@@ -65,7 +65,7 @@ export default class VirtualScrollApi {
       visibleRange: this.visibleRange,
       totalHeight: this.items.totalHeight
     }
-  }
+  };
 
   triggerChange() {
     const listeners = this.listeners;

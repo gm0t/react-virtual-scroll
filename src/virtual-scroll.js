@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'
 import VirtualScrollViewport from './virtual-scroll-viewport';
 import VirtualScrollItems from './virtual-scroll-items';
 import sanitizeProps from './utils/sanitize-props';
@@ -18,7 +19,7 @@ function VirtualScroll(props) {
 VirtualScroll.PropTypes = {
   wrapperClassName: PropTypes.string,
   wrapperProps: PropTypes.object
-}
+};
 
 VirtualScroll.VirtualScrollItems = VirtualScrollItems;
 VirtualScroll.VirtualScrollViewport = VirtualScrollViewport;

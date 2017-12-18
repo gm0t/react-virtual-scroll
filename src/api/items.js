@@ -1,5 +1,24 @@
 import { cloneElement } from 'react';
 
+const getItemHeight = (cmp) => {
+  if (cmp.type && cmp.type.HEIGHT) {
+    let height = cmp.type.HEIGHT;
+    return + (typeof(height) === 'function' ? height(cmp.props) : height);
+  }
+
+  if (cmp.props.style && cmp.props.style.height) {
+    let height = cmp.props.height;
+    if (~height.indexOf('px')) {
+        return parseInt(height, 10);
+    } else if (!isNaN(+height)) {
+        return +height;
+    }
+  }
+
+  // TODO: what should we do with such items?
+  return 0;
+};
+
 export default class Items {
   constructor(children, itemHeight) {
     this.itemHeight = typeof(itemHeight) === 'number' ? itemHeight : 'auto';
@@ -14,25 +33,6 @@ export default class Items {
     this.items = children.map(el => ({cmp: el}));
     this._updateItemsPosition(0);
     this._calcPeakHeights();
-  }
-
-  getHeight(child) {
-    if (child.type && child.type.HEIGHT) {
-      let height = child.type.HEIGHT;
-      return + (typeof(height) === 'function' ? height(child.props) : height);
-    }
-
-    if (child.props.style && child.props.style.height) {
-      let height = child.props.height;
-      if (~height.indexOf('px')) {
-        return parseInt(height, 10);
-      } else if (!isNaN(+height)) {
-        return +height;
-      }
-    }
-
-    // TODO: what should we do with such items?
-    return 0;
   }
 
   updateItemHeight(index, height) {
@@ -91,14 +91,14 @@ export default class Items {
 
     for (let i = start, l = items.length, props; i < l; i += 1) {
       item = items[i];
-      item.height = height === 'auto' ? this.getHeight(item.cmp) : height;
+      item.height = height === 'auto' ? getItemHeight(item.cmp) : height;
       item.top = top;
       props = {...item.cmp.props};
       props.style = {...props.style};
       props.style.position = 'absolute';
       props.style.top = item.top;
       props.index = i;
-      item.cmp = cloneElement(item.cmp, props)
+      item.cmp = cloneElement(item.cmp, props);
       top += item.height;
     }
 
@@ -131,7 +131,6 @@ export default class Items {
       return items.length;
     }
 
-    // TODO: we can also replace minHeight with avgItemHeight in order to optimize loop
     for (let i = Math.floor(pos / maxHeight), l = items.length; i < l; i += 1) {
       if (items[i].top > pos) {
         return Math.max(i - 1, 0);

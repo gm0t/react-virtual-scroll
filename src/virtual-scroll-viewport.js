@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import sanitizeProps from './utils/sanitize-props';
 import VirtualScrollApi from './api'
 
@@ -42,7 +43,7 @@ export default class VirtualScrollViewport extends Component {
      * @type {Function}
      */
     onInit: PropTypes.func
-  }
+  };
 
   static childContextTypes = {
     /**
@@ -70,14 +71,14 @@ export default class VirtualScrollViewport extends Component {
      * @type {Function}
      */
     listen: PropTypes.func.isRequired
-  }
+  };
 
   static defaultProps = {
     itemHeight: 'auto',
     bufferSize: 5,
     estimatedViewportHeight: 0,
     noInlineOverflow: false
-  }
+  };
 
   constructor(props) {
     super(props)
@@ -142,7 +143,7 @@ export default class VirtualScrollViewport extends Component {
     if (this.props.onScroll) {
       this.props.onScroll(e);
     }
-  }
+  };
 
   render () {
     const props = this.props;
